@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/22 00:36:54 by rotrojan         ###   ########.fr        #
+#    Updated: 2021/10/23 17:16:15 by bigo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,13 @@ NAME = philo
 BONUS = philo_bonus
 
 SRCS =				\
-	main_philo.c	\
+	philo_main.c	\
+	philo_parsing.c	\
 	ft_atoi.c		\
 	ft_atoll.c		\
+	ft_strlen.c		\
 	ft_putstr_fd.c
-	
+
 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 DEPENDENCIES = $(OBJS:%.o=%.d)
@@ -44,7 +46,7 @@ LDFLAGS = -pthread
 vpath %.c $(addprefix $(SRCS_DIR), /$(NAME) /$(BONUS) /utils)
 
 all:
-	$(MAKE) $(NAME)
+	@$(MAKE) $(NAME)
 
 $(NAME): $(OBJS)
 	@printf '\nlinking %s\n' '$@'

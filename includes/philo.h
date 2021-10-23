@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/22 01:10:38 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/23 16:21:06 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,7 @@ typedef struct s_table
 	int	time_to_sleep;
 	int	nb_time_each_philo_must_eat;
 }	t_table;
+
+t_bool	check_and_parse(int ac, char **av, t_table *table);
 
 #endif

@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/07 14:39:57 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/23 16:11:38 by bigo             ###   ########.fr       */
+/*   Created: 2019/10/08 22:34:29 by rotrojan          #+#    #+#             */
+/*   Updated: 2021/10/23 16:11:08 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_putstr_fd(char const *str, int fd)
+size_t	ft_strlen(char const *s)
 {
-	write(fd, str, ft_strlen(str));
+	size_t		size;
+
+	size = 0;
+	while (*(s + size))
+		size++;
+	return (size);
 }

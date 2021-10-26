@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/25 18:41:37 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/26 19:57:29 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ enum	e_action
 	Die
 };
 
-
 typedef struct s_table
 {
 	long int		time_start;
@@ -41,7 +40,9 @@ typedef struct s_table
 	int				time_to_sleep;
 	int				nb_time_each_philo_must_eat;
 	pthread_t		*philo;
+	long int		*time_last_meal;
 	pthread_mutex_t	*fork;
+	t_bool			is_finished;
 }	t_table;
 
 t_table	*get_table(void);

@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/25 18:12:29 by bigo             ###   ########.fr        #
+#    Updated: 2021/10/26 17:36:24 by rotrojan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,6 @@ BONUS = philo_bonus
 
 SRCS =				\
 	philo_main.c	\
-	philo_parsing.c	\
 	philo_run.c		\
 	ft_atoi.c		\
 	ft_atoll.c		\

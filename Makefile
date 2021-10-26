@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/23 17:16:15 by bigo             ###   ########.fr        #
+#    Updated: 2021/10/25 18:12:29 by bigo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ BONUS = philo_bonus
 SRCS =				\
 	philo_main.c	\
 	philo_parsing.c	\
+	philo_run.c		\
 	ft_atoi.c		\
 	ft_atoll.c		\
 	ft_strlen.c		\
@@ -39,7 +40,7 @@ DEBUG = off
 
 CFLAGS = -Wall -Wextra -Werror -MMD -MP
 ifeq ($(DEBUG), on)
-	CFLAGS += -g3 -fsanitize=address
+	CFLAGS += -g3#-fsanitize=address
 endif
 LDFLAGS = -pthread
 

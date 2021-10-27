@@ -6,86 +6,13 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/26 20:13:29 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/27 22:46:33 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-t_bool	return_error()
-{
-	return (False);
-}
-
-void	print_action(enum e_action action, int index)
-{
-	struct timeval	tv;
-	char const		*error_msg[] = {
-		"has taken a fork",
-		"is eating",
-		"is sleeping",
-		"is thinking",
-		"died"
-	};
-
-	gettimeofday(&tv, NULL);
-	printf("%ld %d %s\n",
-		tv.tv_sec * 1000 + tv.tv_usec / 1000 - get_table()->time_start,
-		index + 1, error_msg[action]);
-}
-
-void	*routine(void *index)
-{
-	t_table			*table;
-	int				i;
-	struct timeval	tv;
-
-	table = get_table();
-	i = *(int *)index;
-	free(index);
-	while (True)
-	{
-		if (table->is_finished == False)
-		{
-			pthread_mutex_lock(&table->fork[i]);
-			print_action(Take_fork, i);
-		}
-		else
-			break ;
-		if (table->is_finished == False)
-		{
-			pthread_mutex_lock(&table->fork[(i + 1) % table->nb_philo]);
-			print_action(Take_fork, i);
-		}
-		else
-			break ;
-		if (table->is_finished == False)
-		{
-			print_action(Eat, i);
-			gettimeofday(&tv, NULL);
-			table->time_last_meal[i] = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-			usleep(table->time_to_eat * 1000);
-			pthread_mutex_unlock(&table->fork[i]);
-			pthread_mutex_unlock(&table->fork[(i + 1) % table->nb_philo]);
-		}
-		else
-			break ;
-		if (table->is_finished == False)
-		{
-			print_action(Sleep, i);
-			usleep(table->time_to_sleep * 1000);
-		}
-		else
-			break ;
-		if (table->is_finished == False)
-			print_action(Think, i);
-		else
-			break ;
-	}
-	return (NULL);
-}
-
-t_bool	allocate_data(t_table *table)
+static t_bool	allocate_data(t_table *table)
 {
 	table->philo = malloc(sizeof(*table->philo) * table->nb_philo);
 	if (table->philo == NULL)
@@ -99,7 +26,7 @@ t_bool	allocate_data(t_table *table)
 	return (True);
 }
 
-t_bool	init_mutexes(t_table *table)
+static t_bool	init_mutexes(t_table *table)
 {
 	int	i;
 
@@ -107,49 +34,72 @@ t_bool	init_mutexes(t_table *table)
 	while (i < table->nb_philo)
 	{
 		if (pthread_mutex_init(&table->fork[i], NULL) != 0)
-			return (return_error());
+			return (False);
 		++i;
 	}
 	return (True);
 }
 
-t_bool	run_philo(t_table *table)
+static t_bool	launch_threads(t_table *table)
 {
-	struct timeval	tv;
-	int				i;
-	int				*j;
+	int		i;
+	int		*j;
+	t_bool	ret;
 
-	if (allocate_data(table) == False)
-		return (return_error());
-	if (init_mutexes(table) == False)
-		return (return_error());
-	gettimeofday(&tv, NULL);
-	table->time_start = tv.tv_sec * 1000 + tv.tv_sec / 1000;
 	i = 0;
+	ret = True;
 	while (i < table->nb_philo)
 	{
 		j = malloc(sizeof(*j));
 		if (j == NULL)
-			return (return_error());
+		{
+			ret = False;
+			print_error(MALLOC_ERR_MSG);
+		}
 		*j = i;
 		if (pthread_create(&table->philo[i], NULL, &routine, j) != 0)
-			return (return_error());
+		{
+			ret = False;
+			print_error(THREAD_ERR_MSG);
+			break ;
+		}
 		++i;
 	}
+	return (ret);
+}
+
+t_bool	join_threads(t_table *table)
+{
+	int		i;
+	t_bool	ret;
+
 	i = 0;
-	while (True)
+	ret = True;
+	while (i < table->nb_philo)
 	{
-		while (i < table->nb_philo)
-		{
-			gettimeofday(&tv, NULL);
-			if (tv.tv_sec * 1000 + tv.tv_usec / 1000 - table->time_last_meal[i]
-					< table->time_to_die)
-			{
-				table->is_finished = True;
-				print_action(Die, i);
-			}
-			++i;
-		}
+		if (pthread_join(table->philo[i], NULL) != 0)
+			ret = False;
+		++i;
 	}
-	return (True);
+	return (ret);
+}
+
+t_bool	run_philo(t_table *table)
+{
+	int	i;
+
+	if (allocate_data(table) == False)
+		return (print_error(MALLOC_ERR_MSG));
+	if (init_mutexes(table) == False)
+		return (print_error(MUTEX_ERR_MSG));
+	table->time_start = get_time_now();
+	i = 0;
+	while (i < table->nb_philo)
+		table->time_last_meal[i++] = table->time_start;
+	if (launch_threads(table) == False)
+	{
+		join_threads(table);
+		return (False);
+	}
+	return (monitor(table));
 }

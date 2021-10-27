@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/26 19:57:29 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/27 23:06:38 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,18 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
-# include "utils.h"
 # include "ft_bool.h"
+# include "utils.h"
+
+# define ARGS_NB_ERR_MSG "Error: wrong number of arguments\n"
+# define NOT_NUM_ARG_ERR_MSG "Error: the arguments must be numeric\n"
+# define ARG_NOT_POS_ERR_MSG "Error: the arguments must be strictly positive\n"
+# define OVERFLOW_ERR_MSG "Error: the arguments must in the int range\n"
+
+# define MALLOC_ERR_MSG "Error: memory allocation failed\n"
+# define MUTEX_ERR_MSG "Error: mutex initialization failed\n"
+# define THREAD_ERR_MSG "Error: thread creation failed\n"
+# define JOIN_ERR_MSG "Error: thread jonction failed\n"
 
 enum	e_action
 {
@@ -29,6 +39,12 @@ enum	e_action
 	Sleep,
 	Think,
 	Die
+};
+
+enum	e_side
+{
+	Left,
+	Right
 };
 
 typedef struct s_table
@@ -43,10 +59,48 @@ typedef struct s_table
 	long int		*time_last_meal;
 	pthread_mutex_t	*fork;
 	t_bool			is_finished;
+	pthread_mutex_t	write;
 }	t_table;
 
-t_table	*get_table(void);
-t_bool	check_and_parse(int ac, char **av, t_table *table);
-t_bool	run_philo(t_table *table);
+/*
+** philo_main.c
+*/
+
+t_table		*get_table(void);
+
+/*
+** philo_parsing.c
+*/
+
+t_bool		check_and_parse(int ac, char **av, t_table *table);
+
+/*
+** philo_monitor.c
+*/
+
+t_bool		monitor(t_table *table);
+
+/*
+** philo_run.c
+*/
+
+t_bool		run_philo(t_table *table);
+t_bool		join_threads(t_table *table);
+
+/*
+** philo_routine.c
+*/
+
+void		*routine(void *index);
+
+/*
+** philo_actions.c
+*/
+
+void		print_action(enum e_action action, int index);
+t_bool		philo_take_fork(t_table *table, int i, enum e_side side);
+t_bool		philo_eat(t_table *table, int i);
+t_bool		philo_sleep(t_table *table, int i);
+t_bool		philo_think(t_table *table, int i);
 
 #endif

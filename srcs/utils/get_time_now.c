@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   get_time_now.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bigo <rotrojan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/08 22:34:29 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/27 23:14:01 by bigo             ###   ########.fr       */
+/*   Created: 2021/10/27 22:34:25 by bigo              #+#    #+#             */
+/*   Updated: 2021/10/27 22:36:49 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	ft_strlen(char const *s)
+long int	get_time_now(void)
 {
-	size_t		size;
+	struct timeval	tv;
 
-	size = 0;
-	while (*(s + size))
-		size++;
-	return (size);
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }

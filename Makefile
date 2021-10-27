@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/26 17:36:24 by rotrojan         ###   ########.fr        #
+#    Updated: 2021/10/27 22:49:20 by bigo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,23 @@ NAME = philo
 
 BONUS = philo_bonus
 
+
 SRCS =				\
 	philo_main.c	\
+	philo_parsing.c	\
 	philo_run.c		\
+	philo_actions.c	\
+	philo_routine.c	\
+	philo_monitor.c	\
+	$(UTILS)
+
+UTILS =				\
 	ft_atoi.c		\
 	ft_atoll.c		\
 	ft_strlen.c		\
-	ft_putstr_fd.c
+	ft_putstr_fd.c	\
+	get_time_now.c	\
+	print_error.c
 
 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)

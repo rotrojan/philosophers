@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   print_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: bigo <rotrojan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/08 22:34:29 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/27 23:14:01 by bigo             ###   ########.fr       */
+/*   Created: 2021/10/27 22:34:25 by bigo              #+#    #+#             */
+/*   Updated: 2021/10/27 22:35:26 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-size_t	ft_strlen(char const *s)
+t_bool	print_error(char *const error_msg)
 {
-	size_t		size;
-
-	size = 0;
-	while (*(s + size))
-		size++;
-	return (size);
+	ft_putstr_fd(error_msg, STDERR_FILENO);
+	return (False);
 }

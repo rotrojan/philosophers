@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/28 16:32:59 by rotrojan         ###   ########.fr        #
+#    Updated: 2021/10/28 23:59:23 by rotrojan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ UTILS =						\
 	ft_strlen.c				\
 	ft_putstr_fd.c			\
 	get_time_now.c			\
+	msleep.c				\
 	print_error.c
 
 

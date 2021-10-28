@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 18:32:31 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/28 23:56:58 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,12 @@ typedef struct s_protected_data
 	pthread_mutex_t	mutex;
 }	t_protected_data;
 
+typedef struct s_fork
+{
+	pthread_mutex_t	mutex;
+	t_bool			is_locked;
+}	t_fork;
+
 typedef struct s_table
 {
 	long int			time_start;
@@ -63,7 +69,7 @@ typedef struct s_table
 	int					nb_time_each_philo_must_eat;
 	pthread_t			*philo;
 	t_protected_data	*time_last_meal;
-	pthread_mutex_t		*fork;
+	t_fork				*fork;
 	t_protected_data	is_finished;
 	pthread_mutex_t		write_mutex;
 }	t_table;
@@ -111,5 +117,6 @@ t_bool		philo_think(t_table *table, int i);
 
 long int	read_protected_data(t_protected_data *data);
 void		write_protected_data(t_protected_data *data, long int val);
+void		msleep(int msec);
 
 #endif

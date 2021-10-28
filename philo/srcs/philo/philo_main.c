@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 17:50:18 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/28 21:10:33 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int ac, char **av)
 		ret = EXIT_FAILURE;
 	i = 0;
 	while (i < table->nb_philo)
-		pthread_mutex_destroy(&table->fork[i++]);
+		pthread_mutex_destroy(&table->fork[i++].mutex);
 	i = 0;
 	while (i < table->nb_philo)
 		pthread_mutex_destroy(&table->time_last_meal[i++].mutex);

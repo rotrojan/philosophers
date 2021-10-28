@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/27 22:46:33 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/28 01:09:52 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ static t_bool	init_mutexes(t_table *table)
 			return (False);
 		++i;
 	}
+	if (pthread_mutex_init(&table->write_mutex, NULL) != 0)
+		return (False);
+	if (pthread_mutex_init(&table->is_finished_mutex, NULL) != 0)
+		return (False);
 	return (True);
 }
 

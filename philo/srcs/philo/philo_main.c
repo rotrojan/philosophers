@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/27 23:13:20 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/28 01:10:04 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	main(int ac, char **av)
 	i = 0;
 	while (i < table->nb_philo)
 		pthread_mutex_destroy(&table->fork[i++]);
-	pthread_mutex_destroy(&table->write);
+	pthread_mutex_destroy(&table->write_mutex);
+	pthread_mutex_destroy(&table->is_finished_mutex);
 	return (ret);
 }

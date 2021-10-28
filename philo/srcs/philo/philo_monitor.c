@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/27 23:08:20 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/28 02:09:00 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ t_bool	monitor(t_table *table)
 			if (get_time_now() - table->time_last_meal[i]
 				>= table->time_to_die)
 			{
+				pthread_mutex_lock(&table->is_finished_mutex);
 				table->is_finished = True;
-				print_action(Die, i);
+				pthread_mutex_unlock(&table->is_finished_mutex);
+				print_action(table, Die, i);
 				if (join_threads(table) == False)
 					ret = False;
 				break ;

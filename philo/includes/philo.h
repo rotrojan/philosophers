@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/27 23:06:38 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/28 01:15:30 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ typedef struct s_table
 	long int		*time_last_meal;
 	pthread_mutex_t	*fork;
 	t_bool			is_finished;
-	pthread_mutex_t	write;
+	pthread_mutex_t	write_mutex;
+	pthread_mutex_t	is_finished_mutex;
 }	t_table;
 
 /*
@@ -97,7 +98,7 @@ void		*routine(void *index);
 ** philo_actions.c
 */
 
-void		print_action(enum e_action action, int index);
+void		print_action(t_table *table, enum e_action action, int index);
 t_bool		philo_take_fork(t_table *table, int i, enum e_side side);
 t_bool		philo_eat(t_table *table, int i);
 t_bool		philo_sleep(t_table *table, int i);

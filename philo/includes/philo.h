@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 01:15:30 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/28 18:32:31 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,25 @@ enum	e_side
 	Right
 };
 
+typedef struct s_protected_data
+{
+	long int		val;
+	pthread_mutex_t	mutex;
+}	t_protected_data;
+
 typedef struct s_table
 {
-	long int		time_start;
-	int				nb_philo;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				nb_time_each_philo_must_eat;
-	pthread_t		*philo;
-	long int		*time_last_meal;
-	pthread_mutex_t	*fork;
-	t_bool			is_finished;
-	pthread_mutex_t	write_mutex;
-	pthread_mutex_t	is_finished_mutex;
+	long int			time_start;
+	int					nb_philo;
+	int					time_to_die;
+	int					time_to_eat;
+	int					time_to_sleep;
+	int					nb_time_each_philo_must_eat;
+	pthread_t			*philo;
+	t_protected_data	*time_last_meal;
+	pthread_mutex_t		*fork;
+	t_protected_data	is_finished;
+	pthread_mutex_t		write_mutex;
 }	t_table;
 
 /*
@@ -103,5 +108,8 @@ t_bool		philo_take_fork(t_table *table, int i, enum e_side side);
 t_bool		philo_eat(t_table *table, int i);
 t_bool		philo_sleep(t_table *table, int i);
 t_bool		philo_think(t_table *table, int i);
+
+long int	read_protected_data(t_protected_data *data);
+void		write_protected_data(t_protected_data *data, long int val);
 
 #endif

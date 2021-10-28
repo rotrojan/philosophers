@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 01:09:52 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/28 18:31:29 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ static t_bool	allocate_data(t_table *table)
 	table->philo = malloc(sizeof(*table->philo) * table->nb_philo);
 	if (table->philo == NULL)
 		return (False);
-	table->time_last_meal = malloc(sizeof(*table->philo) * table->nb_philo);
+	table->time_last_meal = malloc(sizeof(*table->time_last_meal)
+			* table->nb_philo);
 	if (table->time_last_meal == NULL)
 		return (False);
 	table->fork = malloc(sizeof(*table->fork) * table->nb_philo);
@@ -37,9 +38,16 @@ static t_bool	init_mutexes(t_table *table)
 			return (False);
 		++i;
 	}
+	i = 0;
+	while (i < table->nb_philo)
+	{
+		if (pthread_mutex_init(&table->time_last_meal[i].mutex, NULL) != 0)
+			return (False);
+		++i;
+	}
 	if (pthread_mutex_init(&table->write_mutex, NULL) != 0)
 		return (False);
-	if (pthread_mutex_init(&table->is_finished_mutex, NULL) != 0)
+	if (pthread_mutex_init(&table->is_finished.mutex, NULL) != 0)
 		return (False);
 	return (True);
 }
@@ -99,7 +107,7 @@ t_bool	run_philo(t_table *table)
 	table->time_start = get_time_now();
 	i = 0;
 	while (i < table->nb_philo)
-		table->time_last_meal[i++] = table->time_start;
+		write_protected_data(&table->time_last_meal[i++], table->time_start);
 	if (launch_threads(table) == False)
 	{
 		join_threads(table);

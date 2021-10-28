@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 01:02:44 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/28 18:14:47 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*routine(void *index)
 	table = get_table();
 	i = *(int *)index;
 	free(index);
-	while (table->is_finished == False)
+	while (read_protected_data(&table->is_finished) == False)
 	{
 		if (philo_take_fork(table, i, Left) == False)
 			break ;

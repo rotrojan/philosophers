@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:58:03 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/30 22:46:05 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/30 23:42:20 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ t_bool	philo_take_fork(t_table *table, int i, t_side *side)
 	ret = read_protected_data(&table->no_one_died);
 	if (ret == True)
 		print_action(table, Take_fork, i);
+	while (table->nb_philo == 1)
+	{
+		if (read_protected_data(&table->no_one_died) == False)
+			return (False);
+		usleep(50);
+	}
 	return (ret);
 }
 

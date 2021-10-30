@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/28 23:59:23 by rotrojan         ###   ########.fr        #
+#    Updated: 2021/10/30 23:01:00 by bigo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,6 @@ SRCS =						\
 	philo_actions.c			\
 	philo_routine.c			\
 	philo_monitor.c			\
-	protected_data_utils.c	\
 	$(UTILS)
 
 UTILS =						\
@@ -31,6 +30,7 @@ UTILS =						\
 	ft_strlen.c				\
 	ft_putstr_fd.c			\
 	get_time_now.c			\
+	protected_data_utils.c	\
 	msleep.c				\
 	print_error.c
 

@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/30 12:46:45 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/30 22:19:11 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,37 @@ t_table	*get_table(void)
 		.philo = NULL,
 		.time_last_meal = NULL,
 		.fork = NULL,
-		.no_one_died.val = True
+		.no_one_died.val = True,
+		.sync_start.odd_count.val = 0
 	};
 
 	return (&table);
+}
+
+t_bool	destroy_mutexes(t_table *table)
+{
+	t_bool	ret;
+	int		i;
+
+	ret = True;
+	i = 0;
+	while (i < table->nb_philo)
+	{
+		if (pthread_mutex_destroy(&table->fork[i]) != 0)
+			ret = False;
+		if (pthread_mutex_destroy(&table->time_last_meal[i].mutex) != 0)
+			ret = False;
+		++i;
+	}
+	pthread_mutex_destroy(&table->write_mutex);
+	pthread_mutex_destroy(&table->no_one_died.mutex);
+	return (ret);
 }
 
 int	main(int ac, char **av)
 {
 	t_table	*table;
 	int		ret;
-	int		i;
 
 	table = get_table();
 	ret = EXIT_SUCCESS;
@@ -54,13 +74,7 @@ int	main(int ac, char **av)
 		return (EXIT_FAILURE);
 	if (run_philo(table) == False)
 		ret = EXIT_FAILURE;
-	i = 0;
-	while (i < table->nb_philo)
-		pthread_mutex_destroy(&table->fork[i++].mutex);
-	i = 0;
-	while (i < table->nb_philo)
-		pthread_mutex_destroy(&table->time_last_meal[i++].mutex);
-	pthread_mutex_destroy(&table->write_mutex);
-	pthread_mutex_destroy(&table->no_one_died.mutex);
+	if (destroy_mutexes(table) == False)
+		ret = EXIT_FAILURE;
 	return (ret);
 }

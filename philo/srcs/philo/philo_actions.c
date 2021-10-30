@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:58:03 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/30 12:57:16 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/30 22:46:05 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,23 @@ void	print_action(t_table *table, enum e_action action, int index)
 	pthread_mutex_unlock(&table->write_mutex);
 }
 
-t_bool	philo_take_fork(t_table *table, int i, enum e_side side)
+t_bool	philo_take_fork(t_table *table, int i, t_side *side)
 {
 	t_bool	ret;
 
 	ret = read_protected_data(&table->no_one_died);
 	if (ret == True)
-		pthread_mutex_lock(&table->fork[(i + side) % table->nb_philo].mutex);
+	{
+		pthread_mutex_lock(&table->fork[(i + side->side) % table->nb_philo]);
+		side->is_taken = True;
+	}
 	ret = read_protected_data(&table->no_one_died);
 	if (ret == True)
 		print_action(table, Take_fork, i);
 	return (ret);
 }
 
-t_bool	philo_eat(t_table *table, int i)
+t_bool	philo_eat(t_table *table, int i, t_side *first, t_side *second)
 {
 	t_bool	ret;
 
@@ -54,12 +57,10 @@ t_bool	philo_eat(t_table *table, int i)
 	ret = read_protected_data(&table->no_one_died);
 	if (ret == True)
 		msleep(table->time_to_eat);
-	ret = read_protected_data(&table->no_one_died);
-	if (ret == True)
-		pthread_mutex_unlock(&table->fork[i].mutex);
-	ret = read_protected_data(&table->no_one_died);
-	if (ret == True)
-		pthread_mutex_unlock(&table->fork[(i + 1) % table->nb_philo].mutex);
+	pthread_mutex_unlock(&table->fork[i]);
+	first->is_taken = False;
+	pthread_mutex_unlock(&table->fork[(i + 1) % table->nb_philo]);
+	second->is_taken = False;
 	return (ret);
 }
 
@@ -73,7 +74,7 @@ t_bool	philo_sleep(t_table *table, int i)
 	ret = read_protected_data(&table->no_one_died);
 	if (ret == True)
 		msleep(table->time_to_sleep);
-	return (False);
+	return (ret);
 }
 
 t_bool	philo_think(t_table *table, int i)

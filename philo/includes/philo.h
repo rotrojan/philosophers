@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/30 12:44:06 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/30 22:58:38 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
-# include "ft_bool.h"
-# include "utils.h"
 
 # define ARGS_NB_ERR_MSG "Error: wrong number of arguments\n"
 # define NOT_NUM_ARG_ERR_MSG "Error: the arguments must be numeric\n"
@@ -31,6 +29,12 @@
 # define MUTEX_ERR_MSG "Error: mutex initialization failed\n"
 # define THREAD_ERR_MSG "Error: thread creation failed\n"
 # define JOIN_ERR_MSG "Error: thread jonction failed\n"
+
+typedef enum e_bool
+{
+	False,
+	True
+}	t_bool;
 
 enum	e_action
 {
@@ -53,11 +57,18 @@ typedef struct s_protected_data
 	pthread_mutex_t	mutex;
 }	t_protected_data;
 
-typedef struct s_fork
+typedef struct s_sync_start
 {
-	pthread_mutex_t	mutex;
-	t_bool			is_locked;
-}	t_fork;
+	pthread_mutex_t		start_all;
+	pthread_mutex_t		start_even;
+	t_protected_data	odd_count;
+}	t_sync_start;
+
+typedef struct s_side
+{
+	enum e_side	side;
+	t_bool		is_taken;
+}	t_side;
 
 typedef struct s_table
 {
@@ -69,9 +80,10 @@ typedef struct s_table
 	int					nb_time_each_philo_must_eat;
 	pthread_t			*philo;
 	t_protected_data	*time_last_meal;
-	t_fork				*fork;
+	pthread_mutex_t		*fork;
 	t_protected_data	no_one_died;
 	pthread_mutex_t		write_mutex;
+	t_sync_start		sync_start;
 }	t_table;
 
 /*
@@ -110,11 +122,21 @@ void		*routine(void *index);
 */
 
 void		print_action(t_table *table, enum e_action action, int index);
-t_bool		philo_take_fork(t_table *table, int i, enum e_side side);
-t_bool		philo_eat(t_table *table, int i);
+t_bool		philo_take_fork(t_table *table, int i, t_side *side);
+t_bool		philo_eat(t_table *table, int i, t_side *first, t_side *second);
 t_bool		philo_sleep(t_table *table, int i);
 t_bool		philo_think(t_table *table, int i);
 
+/*
+** utils.c
+*/
+
+int			ft_atoi(char const *str);
+long long	ft_atoll(char const *str);
+void		ft_putstr_fd(char const *str, int fd);
+size_t		ft_strlen(char const *str);
+t_bool		print_error(char *const error_msg);
+long int	get_time_now(void);
 long int	read_protected_data(t_protected_data *data);
 void		write_protected_data(t_protected_data *data, long int val);
 void		msleep(int msec);

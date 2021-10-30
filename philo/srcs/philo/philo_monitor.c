@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 22:04:57 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/30 12:58:05 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_bool	monitor(t_table *table)
 	t_bool	ret;
 
 	ret = True;
-	while (read_protected_data(&table->is_finished) == False)
+	while (read_protected_data(&table->no_one_died) == True)
 	{
 		i = 0;
 		while (i < table->nb_philo)
@@ -26,7 +26,7 @@ t_bool	monitor(t_table *table)
 			if (get_time_now() - read_protected_data(&table->time_last_meal[i])
 				>= table->time_to_die)
 			{
-				write_protected_data(&table->is_finished, True);
+				write_protected_data(&table->no_one_died, False);
 				print_action(table, Die, i);
 				if (join_threads(table) == False)
 					ret = False;

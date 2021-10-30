@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 23:56:58 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/30 12:44:06 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_table
 	pthread_t			*philo;
 	t_protected_data	*time_last_meal;
 	t_fork				*fork;
-	t_protected_data	is_finished;
+	t_protected_data	no_one_died;
 	pthread_mutex_t		write_mutex;
 }	t_table;
 

@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/28 21:10:33 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/10/30 12:46:45 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_table	*get_table(void)
 		.philo = NULL,
 		.time_last_meal = NULL,
 		.fork = NULL,
-		.is_finished.val = False
+		.no_one_died.val = True
 	};
 
 	return (&table);
@@ -61,6 +61,6 @@ int	main(int ac, char **av)
 	while (i < table->nb_philo)
 		pthread_mutex_destroy(&table->time_last_meal[i++].mutex);
 	pthread_mutex_destroy(&table->write_mutex);
-	pthread_mutex_destroy(&table->is_finished.mutex);
+	pthread_mutex_destroy(&table->no_one_died.mutex);
 	return (ret);
 }

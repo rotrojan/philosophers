@@ -6,14 +6,11 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/31 05:00:30 by bigo             ###   ########.fr        #
+#    Updated: 2021/10/31 20:56:31 by bigo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
-
-BONUS = philo_bonus
-
 
 SRCS =						\
 	philo_main.c			\
@@ -33,7 +30,6 @@ UTILS =						\
 	protected_data_utils.c	\
 	msleep.c				\
 	print_error.c
-
 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
 DEPENDENCIES = $(OBJS:%.o=%.d)

@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:58:03 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/31 04:14:26 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/31 20:30:14 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ t_bool	philo_think(t_table *table, int i)
 	if (ret == True)
 	{
 		print_action(table, Think, i);
-		usleep(100);
+		usleep(1000);
 	}
 	return (ret);
 }

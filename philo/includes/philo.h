@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/30 22:58:38 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/31 01:57:55 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_table
 	t_protected_data	no_one_died;
 	pthread_mutex_t		write_mutex;
 	t_sync_start		sync_start;
+	t_protected_data	nb_philo_ate_enough;
 }	t_table;
 
 /*
@@ -115,6 +116,7 @@ t_bool		join_threads(t_table *table);
 ** philo_routine.c
 */
 
+t_bool		check_end_simulation(t_table *table);
 void		*routine(void *index);
 
 /*
@@ -139,6 +141,7 @@ t_bool		print_error(char *const error_msg);
 long int	get_time_now(void);
 long int	read_protected_data(t_protected_data *data);
 void		write_protected_data(t_protected_data *data, long int val);
+void		increment_protected_data(t_protected_data *data);
 void		msleep(int msec);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/30 22:19:11 by bigo             ###   ########.fr       */
+/*   Updated: 2021/10/31 00:14:46 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ t_table	*get_table(void)
 		.time_last_meal = NULL,
 		.fork = NULL,
 		.no_one_died.val = True,
-		.sync_start.odd_count.val = 0
+		.sync_start.odd_count.val = 0,
+		.nb_philo_ate_enough.val = 0
 	};
 
 	return (&table);

@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/31 01:57:55 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/01 20:58:07 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,6 @@ typedef struct s_sync_start
 	t_protected_data	odd_count;
 }	t_sync_start;
 
-typedef struct s_side
-{
-	enum e_side	side;
-	t_bool		is_taken;
-}	t_side;
-
 typedef struct s_table
 {
 	long int			time_start;
@@ -80,7 +74,7 @@ typedef struct s_table
 	int					nb_time_each_philo_must_eat;
 	pthread_t			*philo;
 	t_protected_data	*time_last_meal;
-	pthread_mutex_t		*fork;
+	t_protected_data	*fork;
 	t_protected_data	no_one_died;
 	pthread_mutex_t		write_mutex;
 	t_sync_start		sync_start;
@@ -100,32 +94,32 @@ t_table		*get_table(void);
 t_bool		check_and_parse(int ac, char **av, t_table *table);
 
 /*
-** philo_monitor.c
+** monitor.c
 */
 
 t_bool		monitor(t_table *table);
 
 /*
-** philo_run.c
+** run_philo.c
 */
 
 t_bool		run_philo(t_table *table);
 t_bool		join_threads(t_table *table);
 
 /*
-** philo_routine.c
+** routine.c
 */
 
 t_bool		check_end_simulation(t_table *table);
 void		*routine(void *index);
 
 /*
-** philo_actions.c
+** actions.c
 */
 
 void		print_action(t_table *table, enum e_action action, int index);
-t_bool		philo_take_fork(t_table *table, int i, t_side *side);
-t_bool		philo_eat(t_table *table, int i, t_side *first, t_side *second);
+t_bool		philo_take_fork(t_table *table, int i, enum e_side side);
+t_bool		philo_eat(t_table *table, int i);
 t_bool		philo_sleep(t_table *table, int i);
 t_bool		philo_think(t_table *table, int i);
 

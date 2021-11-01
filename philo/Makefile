@@ -6,19 +6,19 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/10/31 20:56:31 by bigo             ###   ########.fr        #
+#    Updated: 2021/11/01 21:12:38 by bigo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 SRCS =						\
-	philo_main.c			\
-	philo_parsing.c			\
-	philo_run.c				\
-	philo_actions.c			\
-	philo_routine.c			\
-	philo_monitor.c			\
+	main.c					\
+	parsing.c				\
+	run_philo.c				\
+	actions.c				\
+	routine.c				\
+	monitor.c				\
 	$(UTILS)
 
 UTILS =						\
@@ -51,7 +51,7 @@ ifeq ($(DEBUG), on)
 endif
 LDFLAGS = -pthread
 
-vpath %.c $(addprefix $(SRCS_DIR), /$(NAME) /$(BONUS) /utils)
+vpath %.c $(addprefix $(SRCS_DIR), /. /utils)
 
 all:
 	@$(MAKE) $(NAME)

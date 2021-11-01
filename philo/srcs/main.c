@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_main.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/31 00:14:46 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/01 20:31:42 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_bool	destroy_mutexes(t_table *table)
 	i = 0;
 	while (i < table->nb_philo)
 	{
-		if (pthread_mutex_destroy(&table->fork[i]) != 0)
+		if (pthread_mutex_destroy(&table->fork[i].mutex) != 0)
 			ret = False;
 		if (pthread_mutex_destroy(&table->time_last_meal[i].mutex) != 0)
 			ret = False;

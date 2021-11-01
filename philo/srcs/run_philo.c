@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_run.c                                        :+:      :+:    :+:   */
+/*   run_philo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/30 22:19:55 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/01 23:35:55 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,9 @@ static t_bool	init_mutexes(t_table *table)
 	i = 0;
 	while (i < table->nb_philo)
 	{
-		if (pthread_mutex_init(&table->fork[i], NULL) != 0)
+		if (pthread_mutex_init(&table->fork[i].mutex, NULL) != 0)
 			return (False);
-		++i;
-	}
-	i = 0;
-	while (i < table->nb_philo)
-	{
+		table->fork[i].val = True;
 		if (pthread_mutex_init(&table->time_last_meal[i].mutex, NULL) != 0)
 			return (False);
 		++i;

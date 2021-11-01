@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_actions.c                                    :+:      :+:    :+:   */
+/*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:58:03 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/31 20:30:14 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/01 23:42:41 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,20 @@ void	print_action(t_table *table, enum e_action action, int index)
 	pthread_mutex_unlock(&table->write_mutex);
 }
 
-t_bool	philo_take_fork(t_table *table, int i, t_side *side)
+t_bool	philo_take_fork(t_table *table, int i, enum e_side side)
 {
 	t_bool	ret;
 
+	while (True)
+	{
+		if (read_protected_data(&table->fork[(i + side) % table->nb_philo])
+			== True || check_end_simulation(table) == False)
+			break ;
+		usleep(100);
+	}
 	ret = check_end_simulation(table);
 	if (ret == True)
-	{
-		pthread_mutex_lock(&table->fork[(i + side->side) % table->nb_philo]);
-		side->is_taken = True;
-	}
+		write_protected_data(&table->fork[(i + side) % table->nb_philo], False);
 	ret = check_end_simulation(table);
 	if (ret == True)
 		print_action(table, Take_fork, i);
@@ -45,12 +49,12 @@ t_bool	philo_take_fork(t_table *table, int i, t_side *side)
 	{
 		if (read_protected_data(&table->no_one_died) == False)
 			return (False);
-		usleep(50);
+		usleep(100);
 	}
 	return (ret);
 }
 
-t_bool	philo_eat(t_table *table, int i, t_side *first, t_side *second)
+t_bool	philo_eat(t_table *table, int i)
 {
 	t_bool	ret;
 
@@ -63,10 +67,8 @@ t_bool	philo_eat(t_table *table, int i, t_side *first, t_side *second)
 	ret = check_end_simulation(table);
 	if (ret == True)
 		msleep(table->time_to_eat);
-	pthread_mutex_unlock(&table->fork[i]);
-	first->is_taken = False;
-	pthread_mutex_unlock(&table->fork[(i + 1) % table->nb_philo]);
-	second->is_taken = False;
+	write_protected_data(&table->fork[i], True);
+	write_protected_data(&table->fork[(i + 1) % table->nb_philo], True);
 	return (ret);
 }
 
@@ -89,9 +91,6 @@ t_bool	philo_think(t_table *table, int i)
 
 	ret = check_end_simulation(table);
 	if (ret == True)
-	{
 		print_action(table, Think, i);
-		usleep(1000);
-	}
 	return (ret);
 }

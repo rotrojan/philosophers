@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/03 01:18:13 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/03 19:05:21 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	sync_monitor(t_table *table)
 	pthread_mutex_unlock(&table->sync_start.start_even);
 }
 
-t_bool	end_simulation(t_table *table, int i)
+static t_bool	end_simulation(t_table *table, int i)
 {
 	if (read_protected_data(&table->no_one_died) == False)
 		print_action(table, Die, i);

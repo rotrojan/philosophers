@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/01 20:31:42 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/03 18:30:41 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_table	*get_table(void)
 	return (&table);
 }
 
-t_bool	destroy_mutexes(t_table *table)
+static t_bool	destroy_mutexes(t_table *table)
 {
 	t_bool	ret;
 	int		i;

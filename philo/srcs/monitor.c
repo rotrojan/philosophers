@@ -6,11 +6,27 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/31 01:46:15 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/03 01:18:13 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static t_bool	join_threads(t_table *table)
+{
+	int		i;
+	t_bool	ret;
+
+	i = 0;
+	ret = True;
+	while (i < table->nb_philo)
+	{
+		if (pthread_join(table->philo[i], NULL) != 0)
+			ret = False;
+		++i;
+	}
+	return (ret);
+}
 
 static void	sync_monitor(t_table *table)
 {

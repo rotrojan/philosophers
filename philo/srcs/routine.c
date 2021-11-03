@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/01 23:36:00 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/03 01:10:52 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,17 @@ static void	sync_philo(t_table *table, int i)
 	}
 }
 
-static void	routine_loop(t_table *table, int i)
+static void	routine_loop(
+			t_table *table, int i, enum e_side first, enum e_side second)
 {
 	int	nb_time;
 
 	nb_time = 0;
 	while (check_end_simulation(table) == True)
 	{
-		if (philo_take_fork(table, i, Left) == False)
+		if (philo_take_fork(table, i, first) == False)
 			break ;
-		if (philo_take_fork(table, i, Right) == False)
+		if (philo_take_fork(table, i, second) == False)
 			break ;
 		if (philo_eat(table, i) == False)
 			break ;
@@ -60,15 +61,35 @@ static void	routine_loop(t_table *table, int i)
 	}
 }
 
+static void	init_sides(
+			int nb_philo, int i, enum e_side *first, enum e_side *second)
+{
+	if (nb_philo % 2 == 0 && i % 2)
+	{
+		*first = Right;
+		*second = Left;
+	}
+	else
+	{
+		*first = Left;
+		*second = Right;
+	}
+}
+
 void	*routine(void *index)
 {
 	t_table		*table;
 	int			i;
+	enum e_side	first;
+	enum e_side	second;
 
 	table = get_table();
 	i = *(int *)index;
 	free(index);
-	sync_philo(table, i);
-	routine_loop(table, i);
+	index = NULL;
+	if (read_protected_data(&table->no_one_died) == True)
+		sync_philo(table, i);
+	init_sides(table->nb_philo, i, &first, &second);
+	routine_loop(table, i, first, second);
 	return (NULL);
 }

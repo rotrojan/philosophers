@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/01 20:58:07 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/03 01:18:38 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ t_bool		monitor(t_table *table);
 */
 
 t_bool		run_philo(t_table *table);
-t_bool		join_threads(t_table *table);
 
 /*
 ** routine.c

@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/01 23:35:55 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/03 02:11:03 by bigo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,48 +48,47 @@ static t_bool	init_mutexes(t_table *table)
 	return (True);
 }
 
+static t_bool	handle_thread_creation_error(t_table *table, int i)
+{
+	print_error(THREAD_ERR_MSG);
+	write_protected_data(&table->no_one_died, False);
+	pthread_mutex_unlock(&table->sync_start.start_all);
+	pthread_mutex_unlock(&table->sync_start.start_even);
+	while (i > 0)
+	{
+		if (pthread_join(table->philo[i], NULL) != 0)
+			print_error(JOIN_ERR_MSG);
+		--i;
+	}
+	if (pthread_join(table->philo[i], NULL) != 0)
+		print_error(JOIN_ERR_MSG);
+	return (False);
+}
+
 static t_bool	launch_threads(t_table *table)
 {
 	int		i;
 	int		*j;
-	t_bool	ret;
 
 	i = 0;
-	ret = True;
 	while (i < table->nb_philo)
 	{
 		j = malloc(sizeof(*j));
 		if (j == NULL)
 		{
-			ret = False;
 			print_error(MALLOC_ERR_MSG);
+			return (False);
 		}
 		*j = i;
 		if (pthread_create(&table->philo[i], NULL, &routine, j) != 0)
 		{
-			ret = False;
-			print_error(THREAD_ERR_MSG);
-			break ;
+			free(j);
+			j = NULL;
+			return (handle_thread_creation_error(table, --i));
 		}
 		++i;
 	}
-	return (ret);
-}
-
-t_bool	join_threads(t_table *table)
-{
-	int		i;
-	t_bool	ret;
-
-	i = 0;
-	ret = True;
-	while (i < table->nb_philo)
-	{
-		if (pthread_join(table->philo[i], NULL) != 0)
-			ret = False;
-		++i;
-	}
-	return (ret);
+	return (True);
 }
 
 t_bool	run_philo(t_table *table)
@@ -107,9 +106,6 @@ t_bool	run_philo(t_table *table)
 	pthread_mutex_lock(&table->sync_start.start_all);
 	pthread_mutex_lock(&table->sync_start.start_even);
 	if (launch_threads(table) == False)
-	{
-		join_threads(table);
 		return (False);
-	}
 	return (monitor(table));
 }

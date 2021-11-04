@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/11/01 21:12:38 by bigo             ###   ########.fr        #
+#    Updated: 2021/11/04 01:00:16 by rotrojan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,7 +79,7 @@ clean:
 
 fclean: clean
 	@$(RM) $(NAME) $(BONUS)
-	@printf 'philo and philo_bonus removed\n'
+	@printf 'philo removed\n'
 
 re: fclean all
 

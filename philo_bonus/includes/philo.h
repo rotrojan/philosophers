@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/03 22:22:39 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/05 01:10:48 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,13 @@
 
 # define MALLOC_ERR_MSG "Error: memory allocation failed\n"
 # define FORK_ERR_MSG "Error: proces creation failed\n"
+# define SEM_OPEN_ERR_MSG "Error: semaphore creation failed\n"
 # define THREAD_ERR_MSG "Error: thread creation failed\n"
 # define JOIN_ERR_MSG "Error: thread jonction failed\n"
+
+# define SEM_WRITE "/sem_write"
+# define SEM_FORKS "/sem_forks"
+# define SEM_STOP "/sem_stop"
 
 typedef enum e_bool
 {
@@ -56,15 +61,16 @@ enum	e_side
 
 typedef struct s_table
 {
-	long int			time_start;
-	int					nb_philo;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
-	sem_t				*forks;
-	int					nb_time_each_philo_must_eat;
-	sem_t				*sem_write;
-	sem_t				*sem_stop;
+	long int	time_start;
+	int			nb_philo;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	sem_t		*forks;
+	int			nb_time_each_philo_must_eat;
+	pid_t		*pid;
+	sem_t		*sem_write;
+	sem_t		*sem_stop;
 }	t_table;
 
 /*

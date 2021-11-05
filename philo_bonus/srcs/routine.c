@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/04 00:05:04 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/05 03:10:29 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	routine_loop(t_table *table, int i, long int *time_of_death)
 	nb_time = 0;
 	while (True)
 	{
-		if (get_time_now() == *time_of_death)
+		if (get_time_now() >= *time_of_death)
 			return ;
 		if (philo_eat(table, i, time_of_death) == False)
 			break ;
@@ -36,6 +36,7 @@ static void	routine_loop(t_table *table, int i, long int *time_of_death)
 			break ;
 		if (philo_think(table, i, time_of_death) == False)
 			break ;
+		usleep(100);
 	}
 }
 

@@ -6,11 +6,23 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:58:03 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/04 00:30:25 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/05 03:27:47 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+t_bool	check_end_simulation(t_table *table, long int time_of_death, int index)
+{
+	if (get_time_now() >= time_of_death)
+	{
+		print_action(table, Die, index);
+		/* kill(0, SIGINT); */
+		exit(EXIT_SUCCESS);
+		/* return (False); */
+	}
+	return (True);
+}
 
 void	print_action(t_table *table, enum e_action action, int index)
 {
@@ -28,25 +40,31 @@ void	print_action(t_table *table, enum e_action action, int index)
 	sem_post(table->sem_write);
 }
 
-/* t_bool	philo_take_fork(t_table *table, int i, enum e_side side) */
-/* { */
-	/* t_bool	ret; */
-	
-
-	/* return (ret); */
-/* } */
-
 t_bool	philo_eat(t_table *table, int i, long int *time_of_death)
 {
-	sem_wait(table->forks);
-	print_action(table, Take_fork, i);
-	sem_wait(table->forks);
-	print_action(table, Take_fork, i);
-	*time_of_death = get_time_now();
-	print_action(table, Eat, i);
-	msleep(table->time_to_eat, *time_of_death);
-	sem_post(table->forks);
-	sem_post(table->forks);
+	t_bool	ret;
+
+	ret = check_end_simulation(table, *time_of_death, i);
+	if (ret == True)
+	{
+		sem_wait(table->forks);
+		print_action(table, Take_fork, i);
+	}
+	ret = check_end_simulation(table, *time_of_death, i);
+	if (ret == True)
+	{
+		sem_wait(table->forks);
+		print_action(table, Take_fork, i);
+	}
+	ret = check_end_simulation(table, *time_of_death, i);
+	if (ret == True)
+	{
+		*time_of_death = get_time_now() + table->time_to_die;
+		print_action(table, Eat, i);
+		msleep(table->time_to_eat, *time_of_death);
+		sem_post(table->forks);
+		sem_post(table->forks);
+	}
 	return (True);
 }
 
@@ -54,9 +72,12 @@ t_bool	philo_sleep(t_table *table, int i, long int *time_of_death)
 {
 	t_bool	ret;
 
-	ret = True;
-	print_action(table, Sleep, i);
-	msleep(table->time_to_sleep, *time_of_death);
+	ret = check_end_simulation(table, *time_of_death, i);
+	if (ret == True)
+	{
+		print_action(table, Sleep, i);
+		msleep(table->time_to_sleep, *time_of_death);
+	}
 	return (ret);
 }
 
@@ -64,8 +85,7 @@ t_bool	philo_think(t_table *table, int i, long int *time_of_death)
 {
 	t_bool	ret;
 
-	ret = True;
-	(void)time_of_death;
+	ret = check_end_simulation(table, *time_of_death, i);
 	if (ret == True)
 		print_action(table, Think, i);
 	return (ret);

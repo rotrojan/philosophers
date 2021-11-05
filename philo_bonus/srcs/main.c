@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/04 00:19:00 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/05 00:51:41 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ void	destructor(void)
 	t_table	*table;
 
 	table = get_table();
-	/* free(table->philo); */
-	/* free(table->time_last_meal); */
-	/* free(table->fork); */
+	sem_destroy(table->forks);
+	sem_destroy(table->sem_write);
+	sem_destroy(table->sem_stop);
+	free(table->pid);
+	table->pid = NULL;
 }
 
 t_table	*get_table(void)
@@ -49,7 +51,5 @@ int	main(int ac, char **av)
 		return (EXIT_FAILURE);
 	if (run_philo(table) == False)
 		ret = EXIT_FAILURE;
-	/* if (destroy_mutexes(table) == False) */
-		/* ret = EXIT_FAILURE; */
 	return (ret);
 }

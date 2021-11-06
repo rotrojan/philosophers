@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/05 01:10:48 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/06 23:21:27 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 # define PHILO_H
 
 # include <stdio.h>
+# include <pthread.h>
 # include <sys/time.h>
-# include <fcntl.h>
-# include <sys/stat.h>
-# include <semaphore.h>
+# include <signal.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
-# include <sys/wait.h>
+# include <fcntl.h>
+# include <sys/stat.h>
+# include <semaphore.h>
 
 # define ARGS_NB_ERR_MSG "Error: wrong number of arguments\n"
 # define NOT_NUM_ARG_ERR_MSG "Error: the arguments must be numeric\n"
@@ -29,14 +30,17 @@
 # define OVERFLOW_ERR_MSG "Error: the arguments must in the int range\n"
 
 # define MALLOC_ERR_MSG "Error: memory allocation failed\n"
-# define FORK_ERR_MSG "Error: proces creation failed\n"
-# define SEM_OPEN_ERR_MSG "Error: semaphore creation failed\n"
 # define THREAD_ERR_MSG "Error: thread creation failed\n"
 # define JOIN_ERR_MSG "Error: thread jonction failed\n"
+# define SEM_OPEN_ERR_MSG "Error: semaphore creation failed\n"
+# define FORK_ERR_MSG "Error: processus creation failed\n"
 
-# define SEM_WRITE "/sem_write"
 # define SEM_FORKS "/sem_forks"
-# define SEM_STOP "/sem_stop"
+# define SEM_WRITE "/sem_write"
+# define SEM_STOP "/set_stop"
+# define SEM_START_ALL "/sem_start_all"
+# define SEM_START_EVEN "/sem_start_even"
+# define SEM_EAT "/sem_eat"
 
 typedef enum e_bool
 {
@@ -53,24 +57,44 @@ enum	e_action
 	Die
 };
 
-enum	e_side
+/* enum	e_side */
+/* { */
+	/* Left, */
+	/* Right */
+/* }; */
+
+typedef struct s_protected_data
 {
-	Left,
-	Right
-};
+	long int	val;
+	sem_t		sem;
+}	t_protected_data;
+
+typedef struct s_sync_start
+{
+	sem_t				*start_all;
+	sem_t				*start_even;
+	t_protected_data	odd_count;
+}	t_sync_start;
 
 typedef struct s_table
 {
-	long int	time_start;
-	int			nb_philo;
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
-	sem_t		*forks;
-	int			nb_time_each_philo_must_eat;
-	pid_t		*pid;
-	sem_t		*sem_write;
-	sem_t		*sem_stop;
+	long int			time_start;
+	int					nb_philo;
+	int					time_to_die;
+	int					time_to_eat;
+	int					time_to_sleep;
+	int					nb_time_each_philo_must_eat;
+	pthread_t			*watcher;
+	pid_t				*pid;
+	sem_t				*sem_forks;
+	sem_t				*sem_stop;
+	sem_t				*sem_write;
+	sem_t				*sem_eat;
+	long int			*time_last_meal;
+	t_sync_start		sync_start;
+	t_protected_data	nb_philo_ate_enough;
+	t_bool				no_one_died;
+	/* t_protected_data	no_one_died; */
 }	t_table;
 
 /*
@@ -86,28 +110,33 @@ t_table		*get_table(void);
 t_bool		check_and_parse(int ac, char **av, t_table *table);
 
 /*
+** monitor.c
+*/
+
+t_bool		monitor(t_table *table);
+
+/*
 ** run_philo.c
 */
 
 t_bool		run_philo(t_table *table);
-t_bool		join_threads(t_table *table);
 
 /*
 ** routine.c
 */
 
 /* t_bool		check_end_simulation(t_table *table); */
-void		routine(int i, t_table *table);
+void		routine(int i);
 
 /*
 ** actions.c
 */
 
 void		print_action(t_table *table, enum e_action action, int index);
-/* t_bool		philo_take_fork(t_table *table, int i, enum e_side side); */
-t_bool		philo_eat(t_table *table, int i, long int *time_of_death);
-t_bool		philo_sleep(t_table *table, int i, long int *time_of_death);
-t_bool		philo_think(t_table *table, int i, long int *time_of_death);
+t_bool		philo_take_fork(t_table *table, int i/* , enum e_side side */);
+t_bool		philo_eat(t_table *table, int i);
+t_bool		philo_sleep(t_table *table, int i);
+t_bool		philo_think(t_table *table, int i);
 
 /*
 ** utils.c
@@ -119,6 +148,9 @@ void		ft_putstr_fd(char const *str, int fd);
 size_t		ft_strlen(char const *str);
 t_bool		print_error(char *const error_msg);
 long int	get_time_now(void);
-void		msleep(int msec, long int time_of_death);
+/* long int	read_protected_data(t_protected_data *data); */
+/* void		write_protected_data(t_protected_data *data, long int val); */
+/* void		increment_protected_data(t_protected_data *data); */
+void		msleep(int msec);
 
 #endif

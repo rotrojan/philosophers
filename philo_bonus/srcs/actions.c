@@ -6,23 +6,11 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:58:03 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/05 03:27:47 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/07 00:51:12 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-t_bool	check_end_simulation(t_table *table, long int time_of_death, int index)
-{
-	if (get_time_now() >= time_of_death)
-	{
-		print_action(table, Die, index);
-		/* kill(0, SIGINT); */
-		exit(EXIT_SUCCESS);
-		/* return (False); */
-	}
-	return (True);
-}
 
 void	print_action(t_table *table, enum e_action action, int index)
 {
@@ -40,53 +28,86 @@ void	print_action(t_table *table, enum e_action action, int index)
 	sem_post(table->sem_write);
 }
 
-t_bool	philo_eat(t_table *table, int i, long int *time_of_death)
+t_bool	philo_take_fork(t_table *table, int i/* , enum e_side side */)
 {
 	t_bool	ret;
 
-	ret = check_end_simulation(table, *time_of_death, i);
-	if (ret == True)
-	{
-		sem_wait(table->forks);
+	ret = True;
+	/* while (True) */
+	/* { */
+		/* if (read_protected_data(&table->fork[(i + side) % table->nb_philo]) */
+			/* == True || check_end_simulation(table) == False) */
+			/* break ; */
+		/* usleep(100); */
+	/* } */
+	/* ret = check_end_simulation(table); */
+	sem_wait(table->sem_stop);
+	/* if (ret == True) */
+		/* write_protected_data(&table->fork[(i + side) % table->nb_philo], False); */
+	/* ret = check_end_simulation(table); */
+	/* if (ret == True) */
+	sem_wait(table->sem_forks);
 		print_action(table, Take_fork, i);
-	}
-	ret = check_end_simulation(table, *time_of_death, i);
-	if (ret == True)
-	{
-		sem_wait(table->forks);
+	sem_wait(table->sem_forks);
 		print_action(table, Take_fork, i);
-	}
-	ret = check_end_simulation(table, *time_of_death, i);
-	if (ret == True)
-	{
-		*time_of_death = get_time_now() + table->time_to_die;
-		print_action(table, Eat, i);
-		msleep(table->time_to_eat, *time_of_death);
-		sem_post(table->forks);
-		sem_post(table->forks);
-	}
-	return (True);
-}
-
-t_bool	philo_sleep(t_table *table, int i, long int *time_of_death)
-{
-	t_bool	ret;
-
-	ret = check_end_simulation(table, *time_of_death, i);
-	if (ret == True)
-	{
-		print_action(table, Sleep, i);
-		msleep(table->time_to_sleep, *time_of_death);
-	}
+	/* while (table->nb_philo == 1) */
+	/* { */
+		/* if (read_protected_data(&table->no_one_died) == False) */
+			/* return (False); */
+		/* usleep(100); */
+	/* } */
+	sem_post(table->sem_stop);
 	return (ret);
 }
 
-t_bool	philo_think(t_table *table, int i, long int *time_of_death)
+t_bool	philo_eat(t_table *table, int i)
 {
 	t_bool	ret;
 
-	ret = check_end_simulation(table, *time_of_death, i);
-	if (ret == True)
+	ret = True;
+	/* ret = check_end_simulation(table); */
+	/* sem_wait(table->sem_stop); */
+	/* if (ret == True) */
+		print_action(table, Eat, i);
+	sem_post(table->sem_eat);
+	/* ret = check_end_simulation(table); */
+	/* ret = check_end_simulation(table); */
+	/* if (ret == True) */
+	/* sem_post(table->sem_stop); */
+		msleep(table->time_to_eat);
+	sem_post(table->sem_forks);
+	sem_post(table->sem_forks);
+	/* write_protected_data(&table->fork[i], True); */
+	/* write_protected_data(&table->fork[(i + 1) % table->nb_philo], True); */
+	return (ret);
+}
+
+t_bool	philo_sleep(t_table *table, int i)
+{
+	t_bool	ret;
+
+	ret = True;
+	/* sem_wait(table->sem_stop); */
+	/* ret = check_end_simulation(table); */
+	/* if (ret == True) */
+		print_action(table, Sleep, i);
+	/* ret = read_protected_data(&table->no_one_died); */
+	/* if (ret == True) */
+	/* sem_post(table->sem_stop); */
+		msleep(table->time_to_sleep);
+	return (ret);
+}
+
+t_bool	philo_think(t_table *table, int i)
+{
+	t_bool	ret;
+
+	ret = True;
+	/* sem_wait(table->sem_stop); */
+	/* ret = check_end_simulation(table); */
+	/* if (ret == True) */
 		print_action(table, Think, i);
+	/* sem_post(table->sem_stop); */
+	usleep(300);
 	return (ret);
 }

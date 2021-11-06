@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/11/04 01:02:45 by rotrojan         ###   ########.fr        #
+#    Updated: 2021/11/06 23:32:43 by rotrojan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRCS =						\
 	run_philo.c				\
 	actions.c				\
 	routine.c				\
+	monitor.c				\
 	$(UTILS)
 
 UTILS =						\

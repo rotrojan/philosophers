@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/03 02:11:03 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/06 18:58:03 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ static t_bool	init_mutexes(t_table *table)
 		if (pthread_mutex_init(&table->fork[i].mutex, NULL) != 0)
 			return (False);
 		table->fork[i].val = True;
-		if (pthread_mutex_init(&table->time_last_meal[i].mutex, NULL) != 0)
-			return (False);
 		++i;
 	}
 	if (pthread_mutex_init(&table->write_mutex, NULL) != 0)
@@ -102,7 +100,7 @@ t_bool	run_philo(t_table *table)
 	table->time_start = get_time_now();
 	i = 0;
 	while (i < table->nb_philo)
-		write_protected_data(&table->time_last_meal[i++], table->time_start);
+		table->time_last_meal[i++] = table->time_start;
 	pthread_mutex_lock(&table->sync_start.start_all);
 	pthread_mutex_lock(&table->sync_start.start_even);
 	if (launch_threads(table) == False)

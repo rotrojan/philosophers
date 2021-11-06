@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/03 18:30:41 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/06 18:56:51 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ static t_bool	destroy_mutexes(t_table *table)
 	while (i < table->nb_philo)
 	{
 		if (pthread_mutex_destroy(&table->fork[i].mutex) != 0)
-			ret = False;
-		if (pthread_mutex_destroy(&table->time_last_meal[i].mutex) != 0)
 			ret = False;
 		++i;
 	}

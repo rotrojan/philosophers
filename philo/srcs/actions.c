@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:58:03 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/01 23:42:41 by bigo             ###   ########.fr       */
+/*   Updated: 2021/11/06 18:58:49 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_bool	philo_eat(t_table *table, int i)
 		print_action(table, Eat, i);
 	ret = check_end_simulation(table);
 	if (ret == True)
-		write_protected_data(&table->time_last_meal[i], get_time_now());
+		table->time_last_meal[i] = get_time_now();
 	ret = check_end_simulation(table);
 	if (ret == True)
 		msleep(table->time_to_eat);

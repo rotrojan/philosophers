@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/03 19:05:21 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/06 18:59:27 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ t_bool	monitor(t_table *table)
 		i = 0;
 		while (i < table->nb_philo)
 		{
-			if (get_time_now() - read_protected_data(&table->time_last_meal[i])
-				>= table->time_to_die)
+			if (get_time_now() - table->time_last_meal[i] >= table->time_to_die)
 			{
 				write_protected_data(&table->no_one_died, False);
 				break ;

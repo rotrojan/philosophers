@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/03 01:18:38 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/06 18:55:54 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_table
 	int					time_to_sleep;
 	int					nb_time_each_philo_must_eat;
 	pthread_t			*philo;
-	t_protected_data	*time_last_meal;
+	long int			*time_last_meal;
 	t_protected_data	*fork;
 	t_protected_data	no_one_died;
 	pthread_mutex_t		write_mutex;

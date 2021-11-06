@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/06 18:58:03 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/06 20:43:47 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static t_bool	init_mutexes(t_table *table)
 
 static t_bool	handle_thread_creation_error(t_table *table, int i)
 {
-	print_error(THREAD_ERR_MSG);
 	write_protected_data(&table->no_one_died, False);
 	pthread_mutex_unlock(&table->sync_start.start_all);
 	pthread_mutex_unlock(&table->sync_start.start_even);
@@ -72,16 +71,17 @@ static t_bool	launch_threads(t_table *table)
 	while (i < table->nb_philo)
 	{
 		j = malloc(sizeof(*j));
-		if (j == NULL)
+		if (j == NULL || i == 3)
 		{
 			print_error(MALLOC_ERR_MSG);
-			return (False);
+			return (handle_thread_creation_error(table, --i));
 		}
 		*j = i;
 		if (pthread_create(&table->philo[i], NULL, &routine, j) != 0)
 		{
 			free(j);
 			j = NULL;
+			print_error(THREAD_ERR_MSG);
 			return (handle_thread_creation_error(table, --i));
 		}
 		++i;

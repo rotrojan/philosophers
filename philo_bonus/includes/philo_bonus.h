@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 21:40:04 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/08 20:16:50 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/08 21:13:44 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@
 # define SEM_EAT "/sem_eat"
 # define SEM_NO_ONE_DIED "/sem_mo_one_died"
 # define SEM_NB_PHILO_ATE_ENOUGH "/sem_nb_philo_ate_enough"
+# define SEM_LAST_MEAL "/sem_last_meal"
 
 typedef enum e_bool
 {
@@ -77,6 +78,7 @@ typedef struct s_table
 	sem_t				*sem_stop;
 	sem_t				*sem_write;
 	sem_t				*sem_eat;
+	sem_t				*sem_last_meal;
 	long int			*time_last_meal;
 	sem_t				*sem_sync_start;
 	t_protected_data	nb_philo_ate_enough;

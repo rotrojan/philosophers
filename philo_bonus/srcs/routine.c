@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/08 18:57:41 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/08 23:21:51 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	routine(int i)
 	t_table		*table;
 
 	table = get_table();
-	sem_wait(table->sem_sync_start);
-	sem_post(table->sem_sync_start);
+	/* sem_wait(table->sem_sync_start); */
+	/* sem_post(table->sem_sync_start); */
 	while (check_end_simulation(table) == True)
 	{
 		philo_take_forks(table, i);

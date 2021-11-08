@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/06 20:43:47 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/08 22:39:24 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static t_bool	launch_threads(t_table *table)
 	while (i < table->nb_philo)
 	{
 		j = malloc(sizeof(*j));
-		if (j == NULL || i == 3)
+		if (j == NULL)
 		{
 			print_error(MALLOC_ERR_MSG);
 			return (handle_thread_creation_error(table, --i));

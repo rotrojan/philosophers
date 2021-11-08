@@ -6,7 +6,7 @@
 #    By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/21 21:06:11 by rotrojan          #+#    #+#              #
-#    Updated: 2021/11/06 23:32:43 by rotrojan         ###   ########.fr        #
+#    Updated: 2021/11/08 20:16:32 by rotrojan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = philo_bonus
 SRCS =						\
 	main.c					\
 	parsing.c				\
+	open_semaphores.c		\
 	run_philo.c				\
 	actions.c				\
 	routine.c				\
@@ -28,6 +29,7 @@ UTILS =						\
 	ft_putstr_fd.c			\
 	get_time_now.c			\
 	msleep.c				\
+	protected_data_utils.c	\
 	print_error.c
 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)

@@ -1,32 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   protected_data_utils.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/08 17:51:21 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/10/21 23:36:59 by rotrojan         ###   ########.fr       */
+/*   Created: 2021/10/28 16:10:51 by rotrojan          #+#    #+#             */
+/*   Updated: 2021/11/08 18:47:53 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	ft_atoi(char const *str)
+int	read_protected_data(t_protected_data *data)
 {
-	int	result;
-	int	is_negative;
+	int	ret;
 
-	while ((*str >= 9 && *str <= 13) || *str == 32)
-		str++;
-	if (*str == '-')
-		is_negative = -1;
-	else
-		is_negative = 1;
-	if (*str == '-' || *str == '+')
-		str++;
-	result = 0;
-	while (*str >= '0' && *str <= '9' && *str)
-		result = result * 10 + *(str++) - '0';
-	return (result * is_negative);
+	sem_wait(data->sem);
+	ret = data->val;
+	sem_post(data->sem);
+	return (ret);
+}
+
+void	write_protected_data(t_protected_data *data, int val)
+{
+	sem_wait(data->sem);
+	data->val = val;
+	sem_post(data->sem);
+}
+
+void	increment_protected_data(t_protected_data *data)
+{
+	sem_wait(data->sem);
+	++data->val;
+	sem_post(data->sem);
 }

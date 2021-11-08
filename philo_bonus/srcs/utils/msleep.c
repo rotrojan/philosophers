@@ -6,11 +6,11 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/28 23:48:38 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/06 23:31:01 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/08 19:10:08 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 void	msleep(int msec)
 {
@@ -20,9 +20,5 @@ void	msleep(int msec)
 	start_time = get_time_now();
 	table = get_table();
 	while (get_time_now() - start_time < msec)
-	{
-		/* if (read_protected_data(&table->no_one_died) == False) */
-			/* break ; */
 		usleep(100);
-	}
 }

@@ -6,13 +6,31 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/07 00:37:59 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/08 19:47:25 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-static void	kill_all(t_table *table)
+void	*watcher(long int *time_last_meal)
+{
+	t_table		*table;
+	int			nb_time;
+
+	table = get_table();
+	nb_time = 0;
+	while (check_end_simulation(table) == True)
+	{
+		sem_wait(table->sem_eat);
+		*time_last_meal = get_time_now();
+		++nb_time;
+		if (nb_time == table->nb_time_each_philo_must_eat)
+			increment_protected_data(&table->nb_philo_ate_enough);
+	}
+	return (NULL);
+}
+
+void	kill_all(t_table *table)
 {
 	int	i;
 
@@ -21,7 +39,7 @@ static void	kill_all(t_table *table)
 		kill(table->pid[i++], SIGINT);
 }
 
-static t_bool	join_threads(t_table *table)
+t_bool	join_threads(t_table *table)
 {
 	int		i;
 	t_bool	ret;
@@ -43,48 +61,40 @@ static t_bool	join_threads(t_table *table)
 	return (ret);
 }
 
-static void	sync_monitor(t_table *table)
-{
-	sem_post(table->sync_start.start_all);
-	/* while (read_protected_data(&table->sync_start.odd_count) */
-		/* != table->nb_philo / 2) */
-		/* usleep(50); */
-	/* pthread_mutex_unlock(&table->sync_start.start_even); */
-}
-
 static t_bool	end_simulation(t_table *table, int i)
 {
-	/* if (read_protected_data(&table->no_one_died) == False) */
-		print_action(table, Die, i);
+	if (read_protected_data(&table->no_one_died) == False)
+		printf("%6ld %d %s\n", get_time_now() - get_table()->time_start, i + 1,
+			"died");
 	kill_all(table);
 	return (join_threads(table));
 }
 
-t_bool	monitor(t_table *table)
+void	monitor(t_table *table)
 {
 	int		i;
-	t_bool	ret;
 
-	ret = True;
-	sync_monitor(table);
-	while (/* check_end_simulation(table) */table->no_one_died == True)
+	sem_post(table->sem_sync_start);
+	while (check_end_simulation(table) == True)
 	{
 		i = 0;
 		while (i < table->nb_philo)
 		{
 			if (get_time_now() - table->time_last_meal[i] >= table->time_to_die)
 			{
-				/* printf("pouetpouet\n"); */
-				table->no_one_died = False;
-				/* sem_wait(table->sem_stop); */
+				sem_wait(table->sem_write);
+				write_protected_data(&table->no_one_died, False);
 				break ;
 			}
-			/* if (read_protected_data(&table->nb_philo_ate_enough) */
-				/* == table->nb_philo) */
-				/* break ; */
+			if (read_protected_data(&table->nb_philo_ate_enough)
+				== table->nb_philo)
+			{
+				sem_wait(table->sem_write);
+				break ;
+			}
 			++i;
 		}
+		usleep(50);
 	}
 	end_simulation(table, i);
-	return (ret);
 }

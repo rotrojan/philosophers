@@ -6,44 +6,30 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/05 03:10:29 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/08 18:57:41 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-static void	routine_loop(t_table *table, int i, long int *time_of_death)
+t_bool	check_end_simulation(t_table *table)
 {
-	int	nb_time;
-
-	nb_time = 0;
-	while (True)
-	{
-		if (get_time_now() >= *time_of_death)
-			return ;
-		if (philo_eat(table, i, time_of_death) == False)
-			break ;
-		/* if (table->nb_time_each_philo_must_eat != -1) */
-		/* { */
-			/* ++nb_time; */
-			/* if (nb_time == table->nb_time_each_philo_must_eat) */
-			/* { */
-				/* increment_protected_data(&table->nb_philo_ate_enough); */
-				/* break ; */
-			/* } */
-		/* } */
-		if (philo_sleep(table, i, time_of_death) == False)
-			break ;
-		if (philo_think(table, i, time_of_death) == False)
-			break ;
-		usleep(100);
-	}
+	return (read_protected_data(&table->no_one_died) == True
+		&& read_protected_data(&table->nb_philo_ate_enough) != table->nb_philo);
 }
 
-void	routine(int index, t_table *table)
+void	routine(int i)
 {
-	long int	time_of_death;
+	t_table		*table;
 
-	time_of_death = get_time_now() + table->time_to_die;
-	routine_loop(table, index, &time_of_death);
+	table = get_table();
+	sem_wait(table->sem_sync_start);
+	sem_post(table->sem_sync_start);
+	while (check_end_simulation(table) == True)
+	{
+		philo_take_forks(table, i);
+		philo_eat(table, i);
+		philo_sleep(table, i);
+		philo_think(table, i);
+	}
 }

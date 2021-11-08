@@ -6,11 +6,11 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 17:02:07 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/05 00:51:41 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/08 18:13:09 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 void	destructor(void) __attribute__((destructor));
 
@@ -19,11 +19,18 @@ void	destructor(void)
 	t_table	*table;
 
 	table = get_table();
-	sem_destroy(table->forks);
+	free(table->watcher);
+	free(table->time_last_meal);
+	sem_destroy(table->sem_forks);
 	sem_destroy(table->sem_write);
 	sem_destroy(table->sem_stop);
-	free(table->pid);
-	table->pid = NULL;
+	sem_destroy(table->sem_sync_start);
+	sem_destroy(table->sem_eat);
+	sem_unlink(SEM_FORKS);
+	sem_unlink(SEM_WRITE);
+	sem_unlink(SEM_STOP);
+	sem_unlink(SEM_SYNC_START);
+	sem_unlink(SEM_EAT);
 }
 
 t_table	*get_table(void)
@@ -35,6 +42,10 @@ t_table	*get_table(void)
 		.time_to_eat = 0,
 		.time_to_sleep = 0,
 		.nb_time_each_philo_must_eat = 0,
+		.watcher = NULL,
+		.time_last_meal = NULL,
+		.nb_philo_ate_enough.val = 0,
+		.no_one_died.val = True
 	};
 
 	return (&table);

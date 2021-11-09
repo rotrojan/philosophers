@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/08 23:21:24 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/09 01:02:13 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	*watcher(long int *time_last_meal)
 {
 	t_table	*table;
 	int		nb_time;
-
 
 	table = get_table();
 	nb_time = 0;
@@ -77,7 +76,7 @@ void	monitor(t_table *table)
 {
 	int		i;
 
-	/* sem_post(table->sem_sync_start); */
+	sem_post(table->sem_sync_start);
 	while (check_end_simulation(table) == True)
 	{
 		i = 0;
@@ -87,20 +86,17 @@ void	monitor(t_table *table)
 			if (get_time_now() - table->time_last_meal[i] >= table->time_to_die)
 			{
 				sem_post(table->sem_last_meal);
-				sem_wait(table->sem_write);
 				write_protected_data(&table->no_one_died, False);
 				break ;
 			}
 			sem_post(table->sem_last_meal);
 			if (read_protected_data(&table->nb_philo_ate_enough)
 				== table->nb_philo)
-			{
-				sem_wait(table->sem_write);
 				break ;
-			}
 			++i;
 		}
 		usleep(50);
 	}
+	sem_wait(table->sem_write);
 	end_simulation(table, i);
 }

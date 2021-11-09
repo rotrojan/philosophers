@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 20:14:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/08 21:40:55 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/09 00:51:08 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static t_bool	initialize_semaphore(char const *sem_name, sem_t **sem, int val)
 {
 	sem_unlink(sem_name);
-	*sem = sem_open(sem_name, O_CREAT, S_IRWXU | S_IROTH | S_IRGRP, val);
+	*sem = sem_open(sem_name, O_CREAT, S_IRWXU | S_IROTH | S_IRGRP, 0);
 	if (*sem == SEM_FAILED)
 		return (False);
 	while (val > 0)

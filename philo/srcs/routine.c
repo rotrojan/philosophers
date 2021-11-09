@@ -6,7 +6,7 @@
 /*   By: rotrojan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/26 14:57:51 by rotrojan          #+#    #+#             */
-/*   Updated: 2021/11/03 01:10:52 by rotrojan         ###   ########.fr       */
+/*   Updated: 2021/11/09 01:00:05 by rotrojan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ static void	sync_philo(t_table *table, int i)
 	pthread_mutex_unlock(&table->sync_start.start_all);
 	if (i % 2 == 1)
 		increment_protected_data(&table->sync_start.odd_count);
-	if (i % 2 == 0)
+	else
 	{
+		usleep(50);
 		pthread_mutex_lock(&table->sync_start.start_even);
 		pthread_mutex_unlock(&table->sync_start.start_even);
 	}

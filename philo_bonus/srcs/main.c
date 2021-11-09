@@ -21,11 +21,11 @@ void	destructor(void)
 	table = get_table();
 	free(table->watcher);
 	free(table->time_last_meal);
-	sem_destroy(table->sem_forks);
-	sem_destroy(table->sem_write);
-	sem_destroy(table->sem_stop);
-	sem_destroy(table->sem_sync_start);
-	sem_destroy(table->sem_eat);
+	sem_close(table->sem_forks);
+	sem_close(table->sem_write);
+	sem_close(table->sem_stop);
+	sem_close(table->sem_sync_start);
+	sem_close(table->sem_eat);
 	sem_unlink(SEM_FORKS);
 	sem_unlink(SEM_WRITE);
 	sem_unlink(SEM_STOP);
